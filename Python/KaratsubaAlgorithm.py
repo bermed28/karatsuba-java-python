@@ -19,20 +19,32 @@ def karatsuba(x,y, b=10):
 
     N = max(lengthX,lengthY)
 
+    # If x or y are one digit numbers then you can multiply them directly
     if(x < 10 or y < 10):
         return x * y
+
+
     exponent = floor(N / 2)
+
+    # Split x (a,b) and y (c,d) in 2 halves
     A = floor(x / (b ** exponent))
     B = floor(x % (b ** exponent))
     C = floor(y / (b ** exponent))
     D = floor(y % (b ** exponent))
 
 
+    """
+	Recursively compute the three multiplications needed to reduce running time to O(n^1.6): 
+	    (a * c) 
+	    (b * d) 
+	    (a + b)(c + d) = ad + cb
+    """
     AC = karatsuba(A,C)
     BD = karatsuba(B,D)
     ABCD= karatsuba(A+B,C+D) - AC - BD
 
 
+    # Return formula ac*10^(n/2) + (ad + cb)*10^(n/2) + bd
     return (AC * (b**(exponent*2))) + (ABCD * (b**(exponent))) + BD
 
 
